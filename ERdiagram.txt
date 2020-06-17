@@ -1,0 +1,25 @@
+1.
+brew install graphviz
+2.
+sudo pip3.7 install django-extensions
+3.	 settings.py :
+
+	 Add app
+
+	 INSTALLED_APPS = [
+   
+    'django_extensions',
+]
+	 end file :
+
+	 GRAPH_MODELS = {
+    'all_applications': True,
+    'group_models':True,
+}
+
+4.
+sudo pip3.7 install pyparsing pydot
+5.	 
+python3.7 manage.py graph_models -a > erd.dot
+6.	 
+python3.7 manage.py graph_models -a -g -o erd.png

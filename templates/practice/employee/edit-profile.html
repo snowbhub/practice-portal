@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Змінити профіль
+{% endblock %}
+
+{% block content %}
+    <div class="col-lg-12">
+        <div class="box">
+            <h3 class="heading">Змінити профіль</h3>
+            {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <div class="alert alert-danger alert-dismissable">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger alert-dismissable">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <form action="" method="post">
+                {% csrf_token %}
+{#                        {{ form.as_p }}#}
+{#              <button type="submit">Submit New Post</button>#}
+            <div class="image" >
+                <img  class="rounded-circle" src="{% static 'img/avatar.png' %}"
+                      width="150" height="150"
+                      style="display: block; margin-left: auto; margin-right: auto "  alt="">
+                </div>
+                {% for field in form %}
+
+                    {% if field.name == 'gender' %}
+
+                        <div class="form-group">
+                            <label for="gender">Стать</label>
+                            <br>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" {% if field.value == 'male' %} checked {% endif %}
+                                       type="radio" name="gender" id="male gender"
+                                       value="male">
+                                <label class="form-check-label" for="male">Чоловіча</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" {% if field.value == 'female' %} checked {% endif %}
+                                       type="radio" name="gender" id="female"
+                                       value="female">
+                                <label class="form-check-label" for="female">Жіноча</label>
+                            </div>
+                        </div>
+
+                    {% else %}
+
+                        <div class="form-group">
+                            <label for="id_{{ field.name }}">{{ field.label }}</label>
+                            <input type="{{ field.field.widget.input_type }}"
+                                   class="form-control"
+                                   name="{{ field.name }}"
+                                   id="id_{{ field.name }}"
+                                   value="{{ field.value }}"
+                                   placeholder="{{ field.field.widget.attrs.placeholder }}">
+                                    <img src="{{ post.cover.url}}" alt="{{ post.title }}">
+                        </div>
+
+                    {% endif %}
+                {% endfor %}
+                <div class="text-center">
+                    <button type="submit" class="btn btn-outline-white-primary">
+                        <i class="fa fa-signing"></i> Оновити
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

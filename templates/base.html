@@ -1,0 +1,330 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{% block title %} {% endblock %} - Practice Portal</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet"
+          href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}">
+    <!-- Font Awesome CSS-->
+    <link rel="stylesheet"
+          href="{% static 'vendor/font-awesome/css/font-awesome.min.css' %}">
+    <!-- Google fonts - Roboto for copy, Montserrat for headings-->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,700">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Montserrat:400,700">
+    <!-- owl carousel-->
+    <link rel="stylesheet"
+          href="{% static 'vendor/owl.carousel/assets/owl.carousel.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'vendor/owl.carousel/assets/owl.theme.default.css' %}">
+    <!-- theme stylesheet-->
+    <link rel="stylesheet" href="{% static 'css/style.default.css' %}"
+          id="theme-stylesheet">
+    <!-- Custom stylesheet - for your changes-->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    {% block styles %}{% endblock %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="js/google-translate.js"></script>
+    <script src="//translate.google.com/translate_a/element.js?cb=TranslateInit"></script>
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="favicon.png">
+    <!-- Tweaks for older IEs--><!--[if lt IE 9]
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+
+
+</head>
+<body>
+<!-- navbar-->
+<header class="header">
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a href="/" class="navbar-brand">
+                <img src="{% static 'img/logo-small.png' %}" width="200" height="70"alt="logo" class="d-none d-lg-block">
+                <span class="sr-only">Головна</span>
+            </a>
+            <button type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+                    class="navbar-toggler navbar-toggler-right">Меню<i class="fa fa-bars"></i>
+            </button>
+            <div id="navbarSupportedContent" class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+
+                <style>
+
+                    /* Виджет назначает height: 100% , что может привести к непредксказуемому результату, если вы этого не планровали */
+
+html {
+    height: auto !important;
+}
+
+/* Фиксируем позицию body, которую меняет панель гугла */
+
+body {
+    top: 0 !important;
+    position: static !important;
+    min-height: 100vh !important;
+}
+
+/* Прячем панель гугла */
+
+.skiptranslate {
+    display: none !important;
+}
+
+/* Убираем подсветку ссылок */
+
+.goog-text-highlight {
+    background-color: inherit;
+    box-shadow: none;
+    box-sizing: inherit;
+}
+
+/* language */
+
+.language {
+    left: 10px;
+    flex-direction: column;
+    position: relative;
+    margin: auto;
+}
+
+.language__img {
+    cursor: pointer;
+    opacity: .5;
+}
+
+.language__img:hover,
+.language__img_active {
+    opacity: 1;
+}
+                </style>
+                    <li class="nav-item">
+                        <a href="/" class="nav-link">Головна <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'practice:about' %}" class="nav-link">Про нас</a>
+                    </li>
+                    {% if request.user.is_authenticated and request.user.role == 'employer' %}
+                        <li class="nav-item dropdown">
+                            <a id="clientZone" href="#" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false"
+                               class="nav-link dropdown-toggle has-img mb-3 mb-lg-0 mt-3 mt-lg-0">
+                                <div class="client-menu-image">
+                                    <div class="inner">
+                                        <img src="{% static 'img/company-1.png' %}"
+                                             alt="company image"
+                                             class="img-fluid">
+                                    </div>
+                                </div>
+                                {% if request.user.role == 'employee' %}
+                                    {{ request.user.first_name }} {{ request.user.last_name }}
+                                {% else %}
+                                    {{ request.user.first_name }}
+                                {% endif %}
+                            </a>
+                            <div aria-labelledby="clientZone" class="dropdown-menu">
+                                <a href="{% url 'practice:employer-dashboard' %}" class="dropdown-item">Панель приладів</a>
+                                <a href="{% url 'practice:employer-all-applicants' %}" class="dropdown-item">Зявники </a>
+                                <a href="{% url 'practice:employer-practice-create' %}" class="dropdown-item">Опублікуйте нову посаду
+                                    job </a>
+                                <a href="{% url 'accounts:logout' %}" class="dropdown-item">Вийти</a>
+                            </div>
+                        </li>
+                    {% elif request.user.is_authenticated and request.user.role == 'employee' %}
+                        <li class="nav-item dropdown">
+                            <a id="clientZone" href="#" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false"
+                               class="nav-link dropdown-toggle has-img mb-3 mb-lg-0 mt-3 mt-lg-0">
+                                <div class="client-menu-image">
+                                    <div class="inner">
+                                         <img src="{% static 'img/company-1.png' %}"
+                                             alt="company image"
+                                             class="img-fluid">
+                                    </div>
+                                </div>
+                                {% if request.user.role == 'employee' %}
+                                    {{ request.user.first_name }} {{ request.user.last_name }}
+                                {% else %}
+                                    {{ request.user.first_name }}
+                                {% endif %}
+                            </a>
+                            <div aria-labelledby="clientZone" class="dropdown-menu">
+                                <a href="{% url 'accounts:employer-profile-update' %}" class="dropdown-item">Змінити профіль</a>
+                                <a href="{% url 'accounts:logout' %}" class="dropdown-item">Вийти</a>
+                            </div>
+                        </li>
+                         {% elif request.user.is_authenticated %}
+                               
+                            <li class="nav-item dropdown">
+                            <a id="clientZone" href="#" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false"
+                               class="nav-link dropdown-toggle has-img mb-3 mb-lg-0 mt-3 mt-lg-0">
+                                <div class="client-menu-image">
+                                    <div class="inner">
+                                        <img src="{% static 'img/company-1.png' %}"
+                                             alt="company image"
+                                             class="img-fluid">
+                                    </div>
+                                </div>
+                               Адмін </a>
+                        
+                                 <div aria-labelledby="clientZone" class="dropdown-menu">
+                                <a href="http://127.0.0.1:8000/admin" class="dropdown-item">Адмін панель</a>
+                                <a href="{% url 'accounts:logout' %}" class="dropdown-item">Вийти</a>
+                            </div>
+                            </li>
+
+
+                    {% else %}
+                        <li class="nav-item dropdown">
+                            <a id="pages" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                               class="nav-link dropdown-toggle"><i class="fa fa-signing"></i>Зареєструватися
+                            </a>
+                            <div aria-labelledby="pages" class="dropdown-menu">
+                                <a href="{% url 'accounts:employee-register' %}" class="dropdown-item">Практикант</a>
+                                <a href="{% url 'accounts:employer-register' %}" class="dropdown-item">Організація</a>
+                            </div>
+                        </li>
+                        <li class="nav-item" style="color: #fff">
+                            <a href="{% url 'accounts:login' %}" class="btn navbar-btn btn-outline-light mb-5 mb-lg-0">
+                                <i class="fa fa-sign-in"></i>Вхід
+                            </a>
+                        </li>
+                    {% endif %}
+    
+                     <div class="language">
+                             <img src="/static/img/lang/lang__ru.png" alt="ru" data-google-lang="ru" class="language__img">
+                             <img src="/static/img/lang/lang__en.png" alt="en" data-google-lang="en" class="language__img">
+                             <img src="/static/img/lang/lang__ua.png" alt="uk" data-google-lang="uk" class="language__img">
+                 </div>
+                </ul>
+
+                <script>
+                                    /*!***************************************************
+                 * google-translate.js v1.0.2
+                 * https://Get-Web.Site/
+                 * author: L2Banners
+                 *****************************************************/
+
+                const googleTranslateConfig = {
+                    lang: "uk",
+                    /* Если скрипт не работает на поддомене,
+                    раскомментируйте и
+                    укажите основной домен в свойстве domain */
+                    /* domain: "Get-Web.Site" */
+                };
+
+                function TranslateInit() {
+                    let code = TranslateGetCode();
+                    // Находим флаг с выбранным языком для перевода и добавляем к нему активный класс
+                    $('[data-google-lang="' + code + '"]').addClass('language__img_active');
+
+                    if (code == googleTranslateConfig.lang) {
+                        // Если язык по умолчанию, совпадает с языком на который переводим
+                        // То очищаем куки
+                        TranslateCookieHandler(null, googleTranslateConfig.domain);
+                    }
+
+                    // Инициализируем виджет с языком по умолчанию
+                    new google.translate.TranslateElement({
+                        pageLanguage: googleTranslateConfig.lang,
+                    });
+
+                    // Вешаем событие  клик на флаги
+                    $('[data-google-lang]').click(function () {
+                        TranslateCookieHandler("/auto/" + $(this).attr("data-google-lang"), googleTranslateConfig.domain);
+                        // Перезагружаем страницу
+                        window.location.reload();
+                    });
+                }
+
+                function TranslateGetCode() {
+                    // Если куки нет, то передаем дефолтный язык
+                    let lang = ($.cookie('googtrans') != undefined && $.cookie('googtrans') != "null") ? $.cookie('googtrans') : googleTranslateConfig.lang;
+                    return lang.match(/(?!^\/)[^\/]*$/gm)[0];
+                }
+
+                function TranslateCookieHandler(val, domain) {
+                    // Записываем куки /язык_который_переводим/язык_на_который_переводим
+                    $.cookie('googtrans', val);
+                    $.cookie("googtrans", val, {
+                        domain: "." + document.domain,
+                    });
+
+                    if (domain == "undefined") return;
+                    // записываем куки для домена, если он назначен в конфиге
+                    $.cookie("googtrans", val, {
+                        domain: domain,
+                    });
+
+                    $.cookie("googtrans", val, {
+                        domain: "." + domain,
+                    });
+                }
+                </script>
+
+            </div>
+        </div>
+    </nav>
+</header>
+<div>
+    {% if messages %}
+
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+{#            <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</li>#}
+        {% endfor %}
+
+    {% endif %}
+    {% block content %} {% endblock %}
+</div>
+<footer class="footer">
+    <div class="footer__block">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-12 mb-5">
+                    <h4 class="h5">Про Practice portal</h4>
+                    <p> Проект, який дозволить користувачу – студенту чи особі, що потребує проходження практики, знайти необхідне місце для стажування. А для організації чи падприємства запропонувати наявні посади, як для проходження практики так і подальшого працевлаштування. Це допоможе найефективніше налагоджувати зв’язки між практикантом та підприємством. </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer__copyright">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-md-left text-center">
+                    <p>&copy;2020 Practice portal (c)</p><a href="https://www.instagram.com/d.shapovaliuk">d.shapovaliuk</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+{% block javascripts %}
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'vendor/popper.js/umd/popper.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'vendor/jquery.cookie/jquery.cookie.js' %}"></script>
+<script src="{% static 'vendor/owl.carousel/owl.carousel.min.js' %}"></script>
+<script src="{% static 'vendor/bootstrap-select/js/bootstrap-select.min.js' %}"></script>
+<script src="{% static 'js/front.js' %}"></script>
+{% endblock %}
+
+</body>
+
+</html>
