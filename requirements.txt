@@ -33,7 +33,7 @@ pydot==1.4.1
 pygobject==3.26.1
 PyICU==1.9.8
 pyparsing==2.2.0
-PyPDF2==1.26.0
+PyPDF2==1.27.5
 python-apt==1.6.5+ubuntu0.2
 python-dateutil==2.6.1
 python-debian==0.1.32
